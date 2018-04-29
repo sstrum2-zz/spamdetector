@@ -17,6 +17,8 @@ def trainer():
     for row in trainingSet.iterrows():
         answer = row[1]['v1']
         msg = row[1]['v2']
+        print(msg)
+
 
         if (answer == "spam"):
             numSpam += 1
@@ -26,6 +28,7 @@ def trainer():
 
     print("NumSpam: " + str(numSpam))
     print("NumHam: " + str(numHam))
+    print("Total Messages: " + str(msgCount))
 
 
 def tester():
