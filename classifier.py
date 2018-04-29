@@ -12,15 +12,21 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
 from nltk.corpus import stopwords
 
+trainPositive = {}
+trainNegative = {}
+numSpam = 0
+numHam = 0
+msgCount = 0
+
 def trainer():
-    trainPositive = {}
+    global numSpam
+    global numHam
+    global msgCount
+
     trainingSet = pd.read_csv("dataset_train.csv")
-  #  print(trainingSet)
-    msgCount = 0
-    numSpam = 0
-    numHam = 0
+
     spamWords = ""
-    ham_msgs = []
+    hamWords = ""
 
   #  print(trainingSet['v1'])
 
@@ -29,7 +35,6 @@ def trainer():
         msg = row[1]['v2']
        # print(msg)
         msg = porter_stemmer(msg)
-
 
         if (answer == "spam"):
             for word in msg:
@@ -40,14 +45,23 @@ def trainer():
             numSpam = numSpam + 1
 
         else:
-            ham_msgs.append(msg)
-            numHam += 1
+            for word in msg:
+                hamWords += " "
+                hamWords += word
+                print(word)
+                trainNegative[word] = trainNegative.get(word, 0) + 1
+            numHam = numHam + 1
+
         msgCount += 1
 
   #  print("NumSpam: " + str(numSpam))
   #  print("NumHam: " + str(numHam))
   #  print("Total Messages: " + str(msgCount))
     print(trainPositive)
+    print()
+    print()
+    print()
+    print(trainNegative)
 
     spamwc = WordCloud(width=512, height=512).generate(spamWords)
     plt.figure(figsize=(10,8), facecolor='w')
@@ -75,6 +89,31 @@ def porter_stemmer(message):
 
    # print(tokens)
     return tokens
+
+def bayesProbability_tokens(token, isSpam):
+    p = 0
+    if isSpam:
+        num = trainPositive[token]
+        den = float (numSpam)
+        p = num/den
+        print(token)
+        print(p)
+        return p
+    else:
+        num = trainNegative[token]
+        den = float (numHam)
+        p = num/den
+        print(token)
+        print(p)
+        return p
+
+#multiply all token probabilities together for each message
+def bayesProb_msg(msg, isSpam):
+    p = 1.0
+    for word in msg:
+        p = p * bayesProbability_tokens(word, isSpam)
+    return p
+
 
 def tester():
     myVar = 0
