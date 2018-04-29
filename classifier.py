@@ -39,8 +39,9 @@ def trainer():
     print("Total Messages: " + str(msgCount))
 
     spamwc = WordCloud(width=512, height=512).generate(spamWords)
-    plt.figure(figsize=(10,8), facecolor='k')
+    plt.figure(figsize=(10,8), facecolor='w')
     plt.imshow(spamwc)
+    plt.title("Common Spam Words From Training Dataset")
     plt.show()
 
 def tester():
