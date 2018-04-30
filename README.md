@@ -14,14 +14,12 @@ signify a spam attempt.
 Methodology
 ----------
 
-The o
+
 
 Analysis of Results
 -----
 
--   Understand the basic syntax of Scheme and how to evaluate programs in it
--   Understand how to simulate stateful computation by composing monads, and
-    
+-   The following 
 
 
 Relevant Files
