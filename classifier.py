@@ -84,7 +84,7 @@ def porter_stemmer(message):
 
 def bayesProbability_tokens(token, isSpam):
     p = 0
-    smoothing_factor = .3
+    smoothing_factor = .7
     if isSpam:
         num = trainPositive.get(token,0)+ smoothing_factor
         den = float(numSpam + (smoothing_factor * (numSpam + numHam)))
@@ -102,6 +102,7 @@ def bayesProbability_tokens(token, isSpam):
 def bayesProb_msg(msg, isSpam):
     p = 1.0
     for word in msg.split(" "):
+        word = word.lower()
         p = p * bayesProbability_tokens(word, isSpam)
     return p
 
@@ -110,31 +111,63 @@ def classify_msg(msg):
     global numHam
     #decides whether or not an individual message in the test set is spam
     pSpamOverall = 100 * float(numSpam)/float(numSpam + numHam)
-    print(numSpam)
-    print(numSpam + numHam)
+ #   print(numSpam)
+ #   print(numSpam + numHam)
     pHamOverall = 100 * float(numHam)/float((numSpam + numHam))
-    print(pSpamOverall)
-    print(bayesProb_msg(msg, True))
-    print(bayesProb_msg(msg, False))
+ #   print(pSpamOverall)
+ #   print(bayesProb_msg(msg, True))
+ #   print(bayesProb_msg(msg, False))
 
     isSpam = pSpamOverall * bayesProb_msg(msg, True)
     notSpam = pHamOverall * bayesProb_msg(msg, False)
 
 
-    print("P(SPAM):" + str(isSpam))
-    print("P(HAM):" + str(notSpam))
+   # print("P(SPAM):" + str(isSpam))
+  #  print("P(HAM):" + str(notSpam))
 
     if (isSpam > notSpam):
-        print("LIKELY SPAM")
+       # print("LIKELY SPAM")
         return True
     else:
-        print("LIKELY HAM")
+       # print("LIKELY HAM")
         return False
-
-def tester(msg):
-    classify_msg(msg)
 
 
 if __name__ == "__main__":
+    numAccurate = 0
+    numWrong = 0
+    truePos = 0
+    falsePos = 0
+    falseNeg = 0
+    trueNeg = 0
+    msgCount1 = 0
+
     trainer()
-    classify_msg("Why you Dint come with us.")
+    testingSet = pd.read_csv("dataset_test.csv")
+
+    for row in testingSet.iterrows():
+        answer = row[1]['v1']
+        msg = row[1]['v2']
+        detectedSpam = classify_msg(msg)
+        print(detectedSpam)
+
+        if (detectedSpam) and (answer == "spam"):
+            numAccurate = numAccurate + 1
+            truePos = truePos + 1
+        elif (detectedSpam) and (answer == "ham"):
+            falsePos = falsePos + 1
+            numWrong = numWrong + 1
+        elif (detectedSpam == False) and (answer == "ham"):
+            trueNeg = trueNeg + 1
+            numAccurate = numAccurate + 1
+        else:
+            falseNeg = falseNeg + 1
+            numWrong = numWrong + 1
+
+        msgCount1 += 1
+
+    print("Percent True Positives: " + str((float(truePos)/float(msgCount1))))
+    print("Percent True Negatives: " + str((float(trueNeg)/float(msgCount1))))
+    print("Percent False Positives: " + str((float(falsePos)/float(msgCount1))))
+    print("Percent False Negatives: " + str((float(falseNeg)/float(msgCount1))))
+    print ("Accuracy Rate: " + str(float(numAccurate)/float(msgCount1)))
