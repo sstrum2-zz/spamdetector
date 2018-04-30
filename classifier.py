@@ -1,4 +1,4 @@
-#Classifies email snippets as spam or non-spam, using a Naive Bayes' Classifier
+#Classifies text message snippets as spam or non-spam, using a Naive Bayes' Classifier
 #Spam is defined as any snippet where P(Spam) > P(Non-Spam)
 import pandas as pd
 
@@ -17,6 +17,7 @@ trainNegative = {}
 numSpam = 0
 numHam = 0
 msgCount = 0
+foundspamwords = ""
 
 def trainer():
     global numSpam
@@ -28,19 +29,16 @@ def trainer():
     spamWords = ""
     hamWords = ""
 
-  #  print(trainingSet['v1'])
-
     for row in trainingSet.iterrows():
         answer = row[1]['v1']
         msg = row[1]['v2']
-       # print(msg)
+
         msg = porter_stemmer(msg)
 
         if (answer == "spam"):
             for word in msg:
                 spamWords += " "
                 spamWords += word
-              #  print(word)
                 trainPositive[word] = trainPositive.get(word, 0) + 1
             numSpam = numSpam + 1
 
@@ -48,7 +46,6 @@ def trainer():
             for word in msg:
                 hamWords += " "
                 hamWords += word
-            #    print(word)
                 trainNegative[word] = trainNegative.get(word, 0) + 1
             numHam = numHam + 1
 
@@ -69,8 +66,6 @@ def porter_stemmer(message):
     #remove words of short length (< 2)
     tokens = [t for t in tokens if len(t) > 2]
 
-    #insert n-grams here for accuracy enhancement
-
     #remove stop words
     stop_word = stopwords.words('english')
     tokens = [t for t in tokens if (t not in stop_word)]
@@ -79,7 +74,6 @@ def porter_stemmer(message):
     stemfxn = PorterStemmer()
     tokens = [stemfxn.stem(t) for t in tokens]
 
-   # print(tokens)
     return tokens
 
 def bayesProbability_tokens(token, isSpam):
@@ -103,33 +97,30 @@ def bayesProb_msg(msg, isSpam):
     p = 1.0
     for word in msg.split(" "):
         word = word.lower()
+
         p = p * bayesProbability_tokens(word, isSpam)
     return p
 
 def classify_msg(msg):
     global numSpam
     global numHam
+    global foundspamwords
+
     #decides whether or not an individual message in the test set is spam
     pSpamOverall = 100 * float(numSpam)/float(numSpam + numHam)
- #   print(numSpam)
- #   print(numSpam + numHam)
     pHamOverall = 100 * float(numHam)/float((numSpam + numHam))
- #   print(pSpamOverall)
- #   print(bayesProb_msg(msg, True))
- #   print(bayesProb_msg(msg, False))
 
     isSpam = pSpamOverall * bayesProb_msg(msg, True)
     notSpam = pHamOverall * bayesProb_msg(msg, False)
 
 
-   # print("P(SPAM):" + str(isSpam))
-  #  print("P(HAM):" + str(notSpam))
-
     if (isSpam > notSpam):
-       # print("LIKELY SPAM")
+       # likely spam
+        foundspamwords += " "
+        foundspamwords += msg
         return True
     else:
-       # print("LIKELY HAM")
+       # likely not spam
         return False
 
 
@@ -140,7 +131,7 @@ if __name__ == "__main__":
     falsePos = 0
     falseNeg = 0
     trueNeg = 0
-    msgCount1 = 0
+    totalMessageCount = 0
 
     trainer()
     testingSet = pd.read_csv("dataset_test.csv")
@@ -149,7 +140,6 @@ if __name__ == "__main__":
         answer = row[1]['v1']
         msg = row[1]['v2']
         detectedSpam = classify_msg(msg)
-        print(detectedSpam)
 
         if (detectedSpam) and (answer == "spam"):
             numAccurate = numAccurate + 1
@@ -164,10 +154,16 @@ if __name__ == "__main__":
             falseNeg = falseNeg + 1
             numWrong = numWrong + 1
 
-        msgCount1 += 1
+        totalMessageCount += 1
 
-    print("Percent True Positives: " + str((float(truePos)/float(msgCount1))))
-    print("Percent True Negatives: " + str((float(trueNeg)/float(msgCount1))))
-    print("Percent False Positives: " + str((float(falsePos)/float(msgCount1))))
-    print("Percent False Negatives: " + str((float(falseNeg)/float(msgCount1))))
-    print ("Accuracy Rate: " + str(float(numAccurate)/float(msgCount1)))
+    myspamwc = WordCloud(width=512, height=512).generate(foundspamwords)
+    plt.figure(figsize=(10, 8), facecolor='w')
+    plt.imshow(myspamwc)
+    plt.title("Common Spam Words From Testing Dataset")
+    plt.show()
+
+    print("Percent True Positives: " + str((float(truePos) / float(totalMessageCount))))
+    print("Percent True Negatives: " + str((float(trueNeg) / float(totalMessageCount))))
+    print("Percent False Positives: " + str((float(falsePos) / float(totalMessageCount))))
+    print("Percent False Negatives: " + str((float(falseNeg) / float(totalMessageCount))))
+    print ("Accuracy Rate: " + str(float(numAccurate) / float(totalMessageCount)))
