@@ -40,7 +40,7 @@ def trainer():
             for word in msg:
                 spamWords += " "
                 spamWords += word
-                print(word)
+              #  print(word)
                 trainPositive[word] = trainPositive.get(word, 0) + 1
             numSpam = numSpam + 1
 
@@ -48,20 +48,12 @@ def trainer():
             for word in msg:
                 hamWords += " "
                 hamWords += word
-                print(word)
+            #    print(word)
                 trainNegative[word] = trainNegative.get(word, 0) + 1
             numHam = numHam + 1
 
         msgCount += 1
 
-  #  print("NumSpam: " + str(numSpam))
-  #  print("NumHam: " + str(numHam))
-  #  print("Total Messages: " + str(msgCount))
-    print(trainPositive)
-    print()
-    print()
-    print()
-    print(trainNegative)
 
     spamwc = WordCloud(width=512, height=512).generate(spamWords)
     plt.figure(figsize=(10,8), facecolor='w')
@@ -92,34 +84,57 @@ def porter_stemmer(message):
 
 def bayesProbability_tokens(token, isSpam):
     p = 0
+    smoothing_factor = .3
     if isSpam:
-        num = trainPositive[token]
-        den = float (numSpam)
+        num = trainPositive.get(token,0)+ smoothing_factor
+        den = float(numSpam + (smoothing_factor * (numSpam + numHam)))
         p = num/den
-        print(token)
-        print(p)
+
         return p
     else:
-        num = trainNegative[token]
-        den = float (numHam)
+        num = trainNegative.get(token, 0) + smoothing_factor
+        den = float(numHam + (smoothing_factor * (numSpam + numHam)))
         p = num/den
-        print(token)
-        print(p)
+
         return p
 
 #multiply all token probabilities together for each message
 def bayesProb_msg(msg, isSpam):
     p = 1.0
-    for word in msg:
+    for word in msg.split(" "):
         p = p * bayesProbability_tokens(word, isSpam)
     return p
 
+def classify_msg(msg):
+    global numSpam
+    global numHam
+    #decides whether or not an individual message in the test set is spam
+    pSpamOverall = 100 * float(numSpam)/float(numSpam + numHam)
+    print(numSpam)
+    print(numSpam + numHam)
+    pHamOverall = 100 * float(numHam)/float((numSpam + numHam))
+    print(pSpamOverall)
+    print(bayesProb_msg(msg, True))
+    print(bayesProb_msg(msg, False))
 
-def tester():
-    myVar = 0
-    #print("hi")
+    isSpam = pSpamOverall * bayesProb_msg(msg, True)
+    notSpam = pHamOverall * bayesProb_msg(msg, False)
+
+
+    print("P(SPAM):" + str(isSpam))
+    print("P(HAM):" + str(notSpam))
+
+    if (isSpam > notSpam):
+        print("LIKELY SPAM")
+        return True
+    else:
+        print("LIKELY HAM")
+        return False
+
+def tester(msg):
+    classify_msg(msg)
 
 
 if __name__ == "__main__":
     trainer()
-    tester()
+    classify_msg("Why you Dint come with us.")
