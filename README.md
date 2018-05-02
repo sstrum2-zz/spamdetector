@@ -32,6 +32,7 @@ The code in `classifier.py` reads data from our training and testing sets, apply
 the porter stemmer algorithm to train our model to identify spam words. This function also outputs a WordCloud visualization
 of the most common spam words in our training set (visualization included below). 
 
+![Alt Text](spamdetector/spam_training.png "Spam Words")
 
 Analysis of Results
 -----
