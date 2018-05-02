@@ -48,10 +48,12 @@ is labelled as spam. This method also produces a WordCloud of common spam and no
 More information regarding these analytics is discussed below. 
 
 
+
 Analysis of Results
 -----
 
--   The following 
+-   The model produced the following results: 
+
 
 
 
