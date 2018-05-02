@@ -30,7 +30,7 @@ The code in `classifier.py` reads data from our training and testing sets, apply
  
 - `trainer():` reads data from our dataset_train.csv file and imports the data into a Pandas DataFrame. We then apply
 the porter stemmer algorithm to train our model to identify spam words. This function also outputs a WordCloud visualization
-of the most common spam words in our training set (visualization included below). 
+of the most common spam word roots in our training set (visualization included below). 
 ![Alt Text](spam_training.png "Spam Words")
 - `porter_stemmer():` takes a text message and splits it into tokens (words and prefixes). This method 
 uses the Porter Stemmer algorithm, a stemming algorithm that identifies roots of words for more accurate spam classification
@@ -44,8 +44,8 @@ multiply together the probabilities to obtain the probability a message is spam.
 is labelled as spam. This method also produces a WordCloud of common spam and non-spam words in the testing dataset (visualizations included below). 
 ![Alt Text](spam_testing.png "Spam Words")
 ![Alt Text](ham_testing.png "Non-Spam Words")
-
-
+- The main function of this program prints analytics regarding dataset characteristics and model accuracy to the terminal. 
+More information regarding these analytics is discussed below. 
 
 
 Analysis of Results
