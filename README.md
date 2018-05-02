@@ -33,8 +33,6 @@ the porter stemmer algorithm to train our model to identify spam words. This fun
 of the most common spam words in our training set (visualization included below). 
 
 
-
-
 Analysis of Results
 -----
 
