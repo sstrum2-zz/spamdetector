@@ -43,6 +43,8 @@ multiply together the probabilities to obtain the probability a message is spam.
 - `classify_msg():` classifies the message as either spam or not spam. When P(Spam) > P(Not Spam), the message 
 is labelled as spam. This method also produces a WordCloud of common spam 
 words in the testing dataset (visualization included below). 
+![Alt Text](spam_testing.png "Spam Words")
+
 
 
 Analysis of Results
