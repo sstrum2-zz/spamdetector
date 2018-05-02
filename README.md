@@ -32,7 +32,18 @@ The code in `classifier.py` reads data from our training and testing sets, apply
 the porter stemmer algorithm to train our model to identify spam words. This function also outputs a WordCloud visualization
 of the most common spam words in our training set (visualization included below). 
 ![Alt Text](spam_training.png "Spam Words")
-- `porter_stemmer():` takes a text message and splits it into tokens (words and prefixes). 
+- `porter_stemmer():` takes a text message and splits it into tokens (words and prefixes). This method 
+uses the Porter Stemmer algorithm, a stemming algorithm that identifies roots of words for more accurate spam classification
+(e.g. changes "running" and "runner" into "run"). 
+- `bayes_probability():` given that a word is in our training set, we can identify the probability of 
+that word being spam in our testing set through Bayes' theorem. We apply a "smoothing factor" of .7 to compensate for whenever
+a word present in our testing dataset was not present in the training set. 
+- `bayesProb_msg():` as we have the individual probabilities of spam for each word in a message, we can 
+multiply together the probabilities to obtain the probability a message is spam. 
+- `classify_msg():` classifies the message as either spam or not spam. When P(Spam) > P(Not Spam), the message 
+is labelled as spam. This method also produces a WordCloud of common spam 
+words in the testing dataset (visualization included below). 
+
 
 Analysis of Results
 -----
