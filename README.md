@@ -41,9 +41,10 @@ a word present in our testing dataset was not present in the training set.
 - `bayesProb_msg():` as we have the individual probabilities of spam for each word in a message, we can 
 multiply together the probabilities to obtain the probability a message is spam. 
 - `classify_msg():` classifies the message as either spam or not spam. When P(Spam) > P(Not Spam), the message 
-is labelled as spam. This method also produces a WordCloud of common spam 
-words in the testing dataset (visualization included below). 
+is labelled as spam. This method also produces a WordCloud of common spam and non-spam words in the testing dataset (visualizations included below). 
 ![Alt Text](spam_testing.png "Spam Words")
+![Alt Text](ham_testing.png "Non-Spam Words")
+
 
 
 
