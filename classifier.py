@@ -156,6 +156,20 @@ if __name__ == "__main__":
 
         totalMessageCount += 1
 
+    print("COUNTS")
+    print("True Positives")
+    print(truePos)
+    print("True Negatives")
+    print(trueNeg)
+    print("False Positives")
+    print(falsePos)
+    print("False Negatives")
+    print(falseNeg)
+    print("Number Accurate")
+    print(numAccurate)
+    print("Number of Messages")
+    print(totalMessageCount)
+
     myspamwc = WordCloud(width=512, height=512).generate(foundspamwords)
     plt.figure(figsize=(10, 8), facecolor='w')
     plt.imshow(myspamwc)

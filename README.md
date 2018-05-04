@@ -13,7 +13,7 @@ signify a spam attempt.
 
 Methodology
 ----------
-Using the datasets found at [this link](http://spamassassin.apache.org/old/publiccorpus/), we can construct training
+Using the datasets found at[this link](http://spamassassin.apache.org/old/publiccorpus/), we can construct training
 and testing datasets for our model through the 80/20 rule. We will use 80% of the dataset to train our model to recognize 
 spam message, and the remaining 20% to conduct an analysis of the model's effectiveness. As our dataset has a column of 
 text followed by a label indicating whether or not the message is spam, we can use these labels to verify the accuracy
@@ -53,9 +53,20 @@ Analysis of Results
 -----
 
 -   The model produced the following results: 
-
-
-
+    - True Positives (model labeled spam as spam): 218
+    - True Negatives (model labeled non-spam as non-spam): 1248
+    - False Positives (model labeled non-spam as spam): 198
+    - False Negatives (model labeled spam as non-spam): 10
+    - Total Email Count: 1674
+- When converted to percentages, we arrive at the following results: 
+    - Percent True Positives: 13.02%
+    - Percent True Negatives: 74.55%
+    - Percent False Positives: 11.83%
+    - Percent False Negatives: 0.01%
+- We can determine the accuracy rate of our model by adding the percentages of true 
+positives and true negatives together: 
+    - Accuracy Rate = 13.02% + 74.55% = 87.57%
+- Therefore, our model detects spam with**87.57% accuracy**
 
 Running the Classifier
 ------------
