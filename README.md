@@ -65,8 +65,8 @@ Analysis of Results
     - Percent False Negatives: 0.01%
 - We can determine the accuracy rate of our model by adding the percentages of true 
 positives and true negatives together: 
-    - Accuracy Rate = 13.02% + 74.55% = 87.57%
-- Therefore, our model detects spam with **87.57% accuracy**
+   -  (13.02 + 74.55)/(13.02 + 74.55 + 11.83 + 0.01) = 88%
+- Therefore, when rounded to the nearest whole number our model detects spam with **88% accuracy**
 
 Running the Classifier
 ------------
