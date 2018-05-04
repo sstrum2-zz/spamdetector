@@ -62,11 +62,11 @@ Analysis of Results
     - Percent True Positives: 13.02%
     - Percent True Negatives: 74.55%
     - Percent False Positives: 11.83%
-    - Percent False Negatives: 0.01%
+    - Percent False Negatives: 0.60%
 - We can determine the accuracy rate of our model by adding the percentages of true 
-positives and true negatives together: 
-   -  (13.02 + 74.55)/(13.02 + 74.55 + 11.83 + 0.01) = 88%
-- Therefore, when rounded to the nearest whole number our model detects spam with **88% accuracy**
+positives and true negatives and dividing by the entire result set: 
+   -  (13.02 + 74.55)/(13.02 + 74.55 + 11.83 + 0.60) = 87.57%
+- Therefore, our model detects spam with **87.57% accuracy**
 
 Running the Classifier
 ------------
@@ -78,10 +78,10 @@ $ python classifier.py
 ```
 Note that you may have to install certain dependencies (e.g. the "punkt" package for punctuation detection). For the given files (dataset.csv), the following results will be printed to the terminal: 
 ``` {.sh}
-Percent True Positives: 0.130227001195
-Percent True Negatives: 0.745519713262
-Percent False Positives: 0.118279569892
-Percent False Negatives: 0.00597371565114
+True Positives: 0.130227001195
+True Negatives: 0.745519713262
+False Positives: 0.118279569892
+False Negatives: 0.00597371565114
 Accuracy Rate: 0.875746714456
 
 ```

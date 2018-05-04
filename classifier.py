@@ -51,12 +51,15 @@ def trainer():
 
         msgCount += 1
 
-
+    print("\n")
+    print("Training Spam WordCloud opening in new window...")
+    print("\n")
     spamwc = WordCloud(width=512, height=512).generate(spamWords)
     plt.figure(figsize=(10,8), facecolor='w')
     plt.imshow(spamwc)
     plt.title("Common Spam Words From Training Dataset")
     plt.show()
+
 
 def porter_stemmer(message):
 
@@ -156,28 +159,16 @@ if __name__ == "__main__":
 
         totalMessageCount += 1
 
-    print("COUNTS")
-    print("True Positives")
-    print(truePos)
-    print("True Negatives")
-    print(trueNeg)
-    print("False Positives")
-    print(falsePos)
-    print("False Negatives")
-    print(falseNeg)
-    print("Number Accurate")
-    print(numAccurate)
-    print("Number of Messages")
-    print(totalMessageCount)
-
+    print("Testing Spam WordCloud opening in new window...")
+    print("\n")
     myspamwc = WordCloud(width=512, height=512).generate(foundspamwords)
     plt.figure(figsize=(10, 8), facecolor='w')
     plt.imshow(myspamwc)
     plt.title("Common Spam Words From Testing Dataset")
     plt.show()
 
-    print("Percent True Positives: " + str((float(truePos) / float(totalMessageCount))))
-    print("Percent True Negatives: " + str((float(trueNeg) / float(totalMessageCount))))
-    print("Percent False Positives: " + str((float(falsePos) / float(totalMessageCount))))
-    print("Percent False Negatives: " + str((float(falseNeg) / float(totalMessageCount))))
+    print("True Positives: " + str((float(truePos) / float(totalMessageCount))))
+    print("True Negatives: " + str((float(trueNeg) / float(totalMessageCount))))
+    print("False Positives: " + str((float(falsePos) / float(totalMessageCount))))
+    print("False Negatives: " + str((float(falseNeg) / float(totalMessageCount))))
     print ("Accuracy Rate: " + str(float(numAccurate) / float(totalMessageCount)))
